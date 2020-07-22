@@ -25,3 +25,9 @@ To visualise winds, the user must specify the input file, lat and lon variables,
 ```bash
 python view_nc_winds.py --inputFile=samples/winds_20190805.nc --latVariable=lat --lonVariable=lon --plotVariables=U10M,V10M --timestep=1 --scale=3 --arrowSize=300 --outputFile=output.png
 ```
+
+## Visualise currents
+
+```bash
+python view_nc_currents.py --inputFiles=samples/curr_190805_U.nc,samples/curr_190805_V.nc --latVariable=nav_lat --lonVariable=nav_lon --plotVariables=vozocrtx,vomecrty --timestep=1 --scale=5 --arrowSize=10
+```

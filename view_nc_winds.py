@@ -105,6 +105,7 @@ if __name__ == "__main__":
     # read u and v
     umax = ds.variables[plotVar1][ts,:,:]
     vmax = ds.variables[plotVar2][ts,:,:]
+    windnorm = np.sqrt(np.square(umax)+np.square(vmax))
 
     # read lat and lon
     lons = ds.variables[lonVar][:]
@@ -140,7 +141,8 @@ if __name__ == "__main__":
     # color the sea
     lon, lat = np.meshgrid(lons, lats)
     xi, yi = m(lon, lat)
-    cs = m.pcolor(xi, yi, np.squeeze(umax))
+    cs = m.pcolor(xi, yi, np.squeeze(windnorm))
+    # m.streamplot(xi, yi, umax, vmax)
     
     # draw arrows
     X = lons[::scale]
