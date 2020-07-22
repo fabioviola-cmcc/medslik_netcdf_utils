@@ -144,6 +144,8 @@ if __name__ == "__main__":
     xi, yi = m(lon, lat)
     cs = m.pcolor(xi, yi, np.squeeze(currNorm))
 
+    pdb.set_trace()
+    
     # create a regular grid
     xg = np.linspace(lons.min(), lons.max(), len(lons))
     yg = np.linspace(lats.min(), lats.max(), len(lats))

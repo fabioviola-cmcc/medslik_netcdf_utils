@@ -149,8 +149,9 @@ if __name__ == "__main__":
     Y = lats[::scale]
     UU = umax[::scale,::scale]
     VV = vmax[::scale,::scale]
-    m.quiver(X, Y, UU, VV, scale=arrowSize)
-
+#    m.quiver(X, Y, UU, VV, scale=arrowSize)
+    plt.barbs(X, Y, UU, VV)
+    
     # save or show    
     if outputFile:
         logger.debug("Saving output to: %s" % outputFile)
