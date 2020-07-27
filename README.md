@@ -1,6 +1,6 @@
-# NetCDF Utils
+# NetCDF Medslik Utils
 
-This is a simple set of utilities written and maintained by Fabio Viola to deal with NetCDF and Medslik files.
+This is a simple set of utilities written and maintained by Fabio Viola to deal with NetCDF files for Medslik.
 
 ## Coordinate conversion
 
@@ -31,3 +31,14 @@ python view_nc_winds.py --inputFile=samples/winds_20190805.nc --latVariable=lat 
 ```bash
 python view_nc_currents.py --inputFiles=samples/curr_190805_U.nc,samples/curr_190805_V.nc --latVariable=nav_lat --lonVariable=nav_lon --plotVariables=vozocrtx,vomecrty --timestep=1 --scale=5 --arrowSize=10
 ```
+
+## Medslik Extract
+
+This is the python version of Medslik extract script. Mandatory arguments are the desired dates (provided as a comma-separated list with `--dates'), the input folder for winds and currents (`--windFolder` and `--currFolder`) and the same for output (`--outWindFolder` and `--outCurrFolder`).
+
+**Note:** at the moment it only deals with currents.
+
+
+## Rel to NC
+
+The extract script produces ASCII files named rel. This scripts converts them back to NetCDF. Mandatory arguments are: `--inputFile` and `--time` (YYYYMMDD HH:mm).
