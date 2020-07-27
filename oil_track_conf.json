@@ -1,0 +1,9 @@
+{
+    "oil_track": {
+	"spill_prop_file": "/Users/fviola/code/experiments/test_0727_03/spill_properties.nc",
+	"output_folder": "output_test_0727_03",
+	"time_line": {
+	    "start": 0, "end": 4, "increment": 1
+	}
+    }
+}
