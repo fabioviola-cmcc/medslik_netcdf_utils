@@ -129,12 +129,12 @@ if __name__ == "__main__":
                 resolution='l')
 
     # add coastlines, states, and country boundaries
-    m.drawcoastlines()
-    m.drawstates()
-    m.drawcountries()
+    # m.drawcoastlines()
+    # m.drawstates()
+    # m.drawcountries()
     
     # add color
-    m.fillcontinents(color='coral',lake_color='aqua')
+    # m.fillcontinents(color='coral',lake_color='aqua')
 
     # set the title
     plt.title(inputFiles[0])
@@ -144,7 +144,7 @@ if __name__ == "__main__":
     xi, yi = m(lon, lat)
     cs = m.pcolor(xi, yi, np.squeeze(currNorm))
 
-    pdb.set_trace()
+#    pdb.set_trace()
     
     # create a regular grid
     xg = np.linspace(lons.min(), lons.max(), len(lons))
@@ -156,7 +156,7 @@ if __name__ == "__main__":
     UU = pv_u[::scale,::scale]
     VV = pv_v[::scale,::scale]
     m.quiver(X, Y, UU, VV, scale=arrowSize, color='w', width=0.001)
-    m.streamplot(xg, yg, UU, VV, color='k')
+#    m.streamplot(xg, yg, UU, VV, color='k')
     
     # print the colorbar
     plt.colorbar()

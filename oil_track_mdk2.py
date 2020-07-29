@@ -1,40 +1,22 @@
-# Plots MEDSLIK-II oil trajectory from nc files
-import numpy
-print ("numpy OK")
-import netCDF4
-print ("netCDF4 OK")
-from datetime import  *
-print ("datetime OK")
-
-import matplotlib as mpl
-print ("matplotlib OK")
-mpl.use('Agg')
-print ("mpl.usr OK")
-
-import pdb
-
-import matplotlib.pyplot as plt
-print ("matplotlib.pyplot OK")
-#matplotlib.use('Agg')
-#matplotlib.pyplot.use('Agg')
-#plt.use('Agg')
-print ("matplotlib.use OK")   
-     
-from mpl_toolkits.basemap import Basemap
-print ("mpl_toolkits.basemap OK")
-import numpy as np
-
+# requirements
 import os
+import pdb
 import sys
 import json
-import pdb
-import traceback
-
+import numpy
+import imageio
+import netCDF4
 import warnings
+import traceback
+import numpy as np
+from datetime import  *
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from mpl_toolkits.basemap import Basemap
+
+# muting warnings
 warnings.filterwarnings("ignore")
 
-
-print ("Go!")
 
 """
 Application:
@@ -46,6 +28,7 @@ def oil_track(sNcFile, ds, time_index):
 
     # load ncfile
     ncfile = netCDF4.Dataset(sNcFile,'r')
+
     # load start position of the spill
     y0 = ncfile.variables['non_evaporative_volume'].initial_position_y
     x0 = ncfile.variables['non_evaporative_volume'].initial_position_x
@@ -118,6 +101,7 @@ def oil_track(sNcFile, ds, time_index):
 #   It may be a single number e.g. [146] or a list of numbers e.g. np.arange(0,15)
 # - grid_reolution: used to estimate concentrations (in degrees)
 # - output folder: where .png files will be placed
+
 config = None
 sNcFile= None
 grid_resolution = 0.15/110
@@ -164,11 +148,16 @@ if not os.path.exists(output_folder):
 # plotting loop
 cc= 0.
 
+# initialize animation
+images = []
+
+# loop over the timesteps
 for ii in time_line:
 
-    print(ii)
+    print("[oil_track_mdk2] -- Timestep: %s" % ii)
     
     # extract values
+    print("[oil_track_mdk2] -- Extracting values")
     x0, y0, x_points, y_points, box = oil_track(sNcFile, grid_resolution, ii)
 
     if cc == 0:
@@ -181,6 +170,7 @@ for ii in time_line:
         grid_max_latitude = y0 + max_ds
 
         # initiate coastline
+        print("[oil_track_mdk2] -- Initiating Basemap")
         m = Basemap(llcrnrlon=grid_min_longitude-.1,llcrnrlat=grid_min_latitude-.1,\
             urcrnrlon=grid_max_longitude+.101,urcrnrlat=grid_max_latitude+.101,\
             rsphere=(6378137.00,6356752.3142),\
@@ -191,8 +181,7 @@ for ii in time_line:
 
     # Plot trajectory - set map
     plt.figure(figsize=(7, 7)) # This increases resolution
-
-
+    
     # Plot trajectory - use only non zero areas
     oiled_grid_points=numpy.argwhere(box!=0)
     X=x_points[oiled_grid_points[:,1]]
@@ -213,7 +202,6 @@ for ii in time_line:
     	labels=[1,0,0,0],color='black',linewidth=0.03) # draw meridians
         
     # Plot trajectory
-    # m.scatter(x, y, s=5., c=numpy.log(box_plot), vmin=numpy.log(numpy.percentile(box_plot,1)),vmax=numpy.log(numpy.percentile(box_plot,95)), edgecolor='')
     m.scatter(x, y, s=[1.], c=numpy.log(box_plot), vmin=numpy.log(0.05),vmax=numpy.log(1.0), edgecolor='')
     m.plot(x0,y0,'k+',markersize=5)
     
@@ -224,5 +212,10 @@ for ii in time_line:
     cbar.set_label('tons/km2')
     plt.title('Surface oil concentrations for '+ '%03d' % (ii+1) + 'h')
     plt.savefig(output_folder + '/surface_oil_' + '%03d' % (ii+1) + 'h.png',dpi=600,bbox_inches='tight')
-    plt.show()
+    # plt.show()
     plt.close('all')
+    images.append(imageio.imread(output_folder + '/surface_oil_' + '%03d' % (ii+1) + 'h.png'))
+
+# generate output gif
+print("Generating output gif in %s/anim.gif" % output_folder)
+imageio.mimsave(output_folder + '/anim.gif', images, fps=2)
